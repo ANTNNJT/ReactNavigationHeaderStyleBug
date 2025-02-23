@@ -1,131 +1,66 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const orangeHeaderStyle = {
+    headerStyle: {
+        backgroundColor: 'orange',
+    },
+};
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+function HomeScreen() {
+    const navigation = useNavigation();
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity style={{borderWidth: 1, padding: 16, borderColor: 'gray'}} onPress={() => navigation.navigate('Second')} >
+                <Text style={{ fontSize: 24 }}>Go to Second Screen</Text>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+function SecondScreen() {
+    const navigation = useNavigation();
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
-
-  return (
-    <View style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity style={{borderWidth: 1, padding: 16, borderColor: 'gray'}} onPress={() => navigation.navigate('MyModal')} >
+                <Text style={{ fontSize: 24 }}>Open Modal</Text>
+            </TouchableOpacity>
         </View>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </View>
-  );
+    );
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+function ModalScreen() {
+    const navigation = useNavigation();
+
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity style={{borderWidth: 1, padding: 16, borderColor: 'gray'}} onPress={() => navigation.goBack()} >
+                <Text style={{ fontSize: 24 }}>Go Back</Text>
+            </TouchableOpacity>
+        </View>
+    );
+}
+
+const RootStack = createStackNavigator();
+
+function App() {
+    return (
+        <NavigationContainer>
+            <RootStack.Navigator>
+                <RootStack.Group>
+                    <RootStack.Screen name="Home" component={HomeScreen} options={orangeHeaderStyle} />
+                    <RootStack.Screen name="Second" component={SecondScreen} options={orangeHeaderStyle} />
+                </RootStack.Group>
+                <RootStack.Group screenOptions={{ presentation: 'modal' }}>
+                    <RootStack.Screen name="MyModal" component={ModalScreen} options={orangeHeaderStyle} />
+                </RootStack.Group>
+            </RootStack.Navigator>
+        </NavigationContainer>
+    );
+}
 
 export default App;
